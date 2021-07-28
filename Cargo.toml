@@ -1,6 +1,10 @@
 [package]
 name = "intname"
 version = "0.1.0"
+authors = ["Cabralski (Pedro Cabral)"]
+description = "Full English name for any integer of any primitive integer type."
+readme = "README.md"
+repository = "https://github.com/cabralski/intname"
 edition = "2018"
 
 [dependencies]
