@@ -8,7 +8,6 @@ repository = "https://github.com/cabralski/intname"
 license-file = "Apache-2.0"
 keywords = ["integer", "name", "text", "formatting"]
 categories = ["text-processing"]
-publish = ["intname"]
 edition = "2018"
 
 [dependencies]
