@@ -5,6 +5,12 @@
 //! use intname::integer_name;
 //! assert_eq!(&integer_name(42), "forty-two")
 //! ```
+//!
+//! Huge `signed` or `unsigned` integers can be parsed in nanoseconds.
+//! ```rust
+//! use intname::integer_name;
+//! assert_eq!(&integer_name(170141183460469231731687303715884105727i128), "one hundred seventy undecillion, one hundred forty-one decillion, one hundred eighty-three nonillion, four hundred sixty octillion, four hundred sixty-nine septillion, two hundred thirty-one sextillion, seven hundred thirty-one quintillion, six hundred eighty-seven quadrillion, three hundred three trillion, seven hundred fifteen billion, eight hundred eighty-four million, one hundred five thousand, seven hundred twenty-seven");
+//! ```
 
 /// Contains all numbers from `one` to `nineteen`.
 const NUMBERS: [&str; 20] = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
@@ -18,7 +24,8 @@ const DECIMAL_CLASSES: [&str; 13] = ["", "thousand", "million", "billion", "tril
 
 extern crate num_traits;                      // this library uses num_traits for traits for generics.
 use num_traits::{PrimInt, ToPrimitive, zero}; // integer trait for generic implementation.
-use std::convert::TryInto;                    // TryInto for some iterative stuff.
+use std::convert::TryInto;                    // good ol' TryInto for some unwrapping.
+
 
 pub(crate) fn tiny_integer_name(int: u16) -> String {
 
@@ -56,18 +63,17 @@ pub(crate) fn tiny_integer_name(int: u16) -> String {
 /// Computes the integer name for a given `signed` or `unsigned` integer.
 pub fn integer_name<T: PrimInt + ToPrimitive>(int: T) -> String {
 
-    let mut name: String = String::new();
-
     if int.is_zero() {
         return "zero".to_string();
     }
+    
+    let mut name: String = String::new();
 
     if int < zero() {
         name.push_str("negative ")
     }
     
     let mut int: u128 = int.to_u128().unwrap();
-    
     let mut hundreds: Vec<u16> = Vec::new();
 
     while int > 0 {
