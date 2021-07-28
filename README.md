@@ -1,10 +1,15 @@
-# intname
-`intname` is a tiny crate for generating integer names based on any integer type ranging from `u8` to `u128` and `i8` to `i128`.
-The maximum scalar value supported for integers is `u128::MAX`.
+`intname` is a light and tiny crate for generating integer names based on any integer type ranging from `u8` to `u64` and `i8` to `i128`.
+The maximum value supported for integers is `[i128::MIN + 1, i128::MAX]`.
 
 ```rust
 use intname::integer_name;
-assert_eq!(&integer_name(42), "forty-two")
+assert_eq!(&integer_name(42), "forty-two");
+```
+
+Works seamless with `signed` integers.
+```rust
+use intname::integer_name;
+assert_eq!(&integer_name(i32::MAX), "two billion, one hundred forty-seven million, four hundred eighty-three thousand, six hundred forty-seven");
 ```
 
 Huge `signed` or `unsigned` integers can be parsed in nanoseconds.
