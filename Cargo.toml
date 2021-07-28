@@ -1,6 +1,6 @@
 [package]
 name = "intname"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Cabralski (Pedro Cabral)"]
 description = "Full English name for any integer of any primitive integer type."
 readme = "README.md"
