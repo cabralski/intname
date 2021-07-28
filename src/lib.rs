@@ -15,7 +15,7 @@
 //! Huge `signed` or `unsigned` integers can be parsed in nanoseconds.
 //! ```rust
 //! use intname::integer_name;
-//! assert_eq!(&integer_name(170141183460469231731687303715884105727i128), "one hundred seventy undecillion, one hundred forty-one decillion, one hundred eighty-three nonillion, four hundred sixty octillion, four hundred sixty-nine septillion, two hundred thirty-one sextillion, seven hundred thirty-one quintillion, six hundred eighty-seven quadrillion, three hundred three trillion, seven hundred fifteen billion, eight hundred eighty-four million, one hundred five thousand, seven hundred twenty-seven");
+//! assert_eq!(&integer_name(i128::MAX), "one hundred seventy undecillion, one hundred forty-one decillion, one hundred eighty-three nonillion, four hundred sixty octillion, four hundred sixty-nine septillion, two hundred thirty-one sextillion, seven hundred thirty-one quintillion, six hundred eighty-seven quadrillion, three hundred three trillion, seven hundred fifteen billion, eight hundred eighty-four million, one hundred five thousand, seven hundred twenty-seven");
 //! ```
 
 /// Contains all numbers from `one` to `nineteen`.
@@ -31,7 +31,6 @@ const DECIMAL_CLASSES: [&str; 13] = ["", "thousand", "million", "billion", "tril
 extern crate num_traits;                      // this library uses num_traits for traits for generics.
 use num_traits::{PrimInt, ToPrimitive, zero}; // integer trait for generic implementation.
 use std::convert::TryInto;                    // good ol' TryInto for some unwrapping.
-
 
 pub(crate) fn tiny_integer_name(int: u16) -> String {
 
@@ -76,11 +75,13 @@ pub fn integer_name<T: PrimInt + ToPrimitive>(int: T) -> String {
     let mut name: String = String::new();
 
     if int < zero() {
-        name.push_str("negative ")
+        name.push_str("negative ");
     }
-    
-    let int: i128 = int.to_i128().unwrap();
-    let mut int: i128 = int.abs();
+
+    let mut int: i128 = match int.to_i128() {
+        Some(n) => n.abs(),
+        None => panic!("The maximum value supported for integers is [i128::MIN + 1, i128::MAX].")
+    };
 
     let mut hundreds: Vec<u16> = Vec::new();
 
